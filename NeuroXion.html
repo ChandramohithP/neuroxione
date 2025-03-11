@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroXion 2025 - Stage 1 Results</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: url('images/background.gif') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            color: white;
+        }
+
+        .header img {
+            width: 120px;
+            margin: 10px;
+        }
+
+        .container {
+            background: linear-gradient(135deg, rgba(0, 120, 255, 0.8), rgba(0, 198, 255, 0.8));
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            width: 400px;
+            max-width: 90%;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        h1, h2 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            background: #e6f7ff;
+            color: #000;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #ff4b4b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e63e3e;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        /* Badge Display Section */
+        .badge-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            animation: pop-up 0.8s ease-out forwards;
+        }
+
+        .badge-container img {
+            width: 150px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-message {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        .download-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #32CD32;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #28a428;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            color: white;
+            text-align: center;
+        }
+
+        .popup .popup-message {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .popup button {
+            background-color: #ff4b4b;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .popup button:hover {
+            background-color: #e63e3e;
+        }
+
+        /* Keyframe animation for badge and popup */
+        @keyframes pop-up {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 90%;
+            }
+
+            .header img {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NEURO NEXUS CLUB'S</h1>
+        <img src="images/neuro_nexus_logo.jpg" alt="Neuro Nexus Logo">
+        <h1>NeuroXion 2025 - Stage 1 Results</h1>
+        <img src="images/NeuroXion.jpg" alt="NeuroXion Logo">
+    </div>
+
+    <div class="container">
+        <h2>Find Out Your Team's Result!</h2>
+        <input type="text" id="teamName" placeholder="Enter Your Team Name">
+        <button onclick="checkTeam()">Check Result</button>
+        <div class="result" id="resultDisplay"></div>
+
+        <!-- Badge Display Section -->
+        <div class="badge-container" id="badgeContainer">
+            <img src="images/Dare_To_Rise_Emblem.jpg" alt="Dare to Rise Emblem" id="badgeImage">
+            <p class="badge-message" id="badgeMessage"></p>
+            <button class="download-btn" onclick="downloadBadge()">Download Badge</button>
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <p class="popup-message" id="popupMessage"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        const selectedTeams = [
+            "EMIRATES", "MindCanvas Crew", "GoldenSpark", "TECH CODER", "why not", "AI PRINCE", 
+            "ARCEUS DOMINION", "Spartans", "Tech Tetrads", "Speak Seek", "Phinehas",
+            "Breaking Bots", "Bullet Train", "Zonic", "Technexa Horizon", "ACHIEVERS",
+            "SpeedEye", "Digital Dynamos", "King Makers", "Code Wizards",
+            "The Creative Crew", "Gen Nxt", "Neural Dreamers", "Tech Divas", "Trio Titans",
+            "Tech Surge", "Eco-CentricX", "Ctrl+Alt+Defeat!", "TECH VIBEz",
+            "Tech Wizards", "RS Coders", "The Spark", "Techduo", "WARLOCKS", "Tech Titans"
+        ];
+
+        function normalizeName(name) {
+            return name.trim().toUpperCase().replace(/[^A-Z0-9]/g, "").replace(/\s+/g, "");
+        }
+
+        function checkTeam() {
+            const inputName = normalizeName(document.getElementById('teamName').value);
+            const normalizedTeams = selectedTeams.flatMap(team => [
+                team.toUpperCase(),
+                team.toUpperCase().replace(/ /g, ""),
+                team.toUpperCase().replace(/ /g, "_"),
+                team.toUpperCase().replace(/ /g, "-"),
+                team.toUpperCase().replace(/[^A-Z0-9]/g, "")
+            ]);
+
+            const resultDisplay = document.getElementById('resultDisplay');
+            const badgeContainer = document.getElementById('badgeContainer');
+            const badgeMessage = document.getElementById('badgeMessage');
+            const popup = document.getElementById('popup');
+            const popupMessage = document.getElementById('popupMessage');
+
+            const teamName = document.getElementById('teamName').value;
+
+            if (normalizedTeams.includes(inputName)) {
+                resultDisplay.innerHTML = `🎯 Congratulations, ${teamName}! Your team has advanced to Stage 2.`;
+                resultDisplay.style.color = "#32CD32";
+
+                // Show Badge with Message
+                badgeContainer.style.display = "block";
+                badgeMessage.innerHTML = `This emblem represents your courage, ambition, and drive to innovate. Share it proudly, as it symbolizes your journey to rise and conquer challenges.`;
+
+                // Show Popup Message
+                popupMessage.innerHTML = `🎉 ${teamName}, you've unlocked your badge! Congratulations on advancing to Stage 2!`;
+                popup.style.display = "block";
+            } else {
+                resultDisplay.innerHTML = "❌ Sorry! Your team has not advanced this time. Keep innovating!";
+                resultDisplay.style.color = "#FF4500";
+                badgeContainer.style.display = "none"; // Hide badge if not selected
+            }
+        }
+
+        function downloadBadge() {
+            const badgeImage = document.getElementById("badgeImage").src;
+            const link = document.createElement("a");
+            link.href = badgeImage;
+            link.download = "Dare_To_Rise_Emblem.jpg";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = "none";
+        }
+    </script>
+</body>
+</html>
